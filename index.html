@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cricket Zone | B.Sc. IT Project</title>
+
+<style>
+:root {
+  --bg: #071b24;
+  --panel: #102d35;
+  --panel2: #04141b;
+  --text: #f4fffb;
+  --muted: #c5ded5;
+  --green: #38d996;
+  --green-dark: #06251b;
+  --red: #ff5b62;
+  --yellow: #f4c95d;
+  --border: #23505a;
+  --shadow: 0 12px 35px #0004;
+}
+
+body.light {
+  --bg: #eaf5f0;
+  --panel: #ffffff;
+  --panel2: #dcece5;
+  --text: #102d35;
+  --muted: #49635a;
+  --green: #087f5b;
+  --green-dark: #ffffff;
+  --red: #c92a36;
+  --yellow: #f4c95d;
+  --border: #b9d4c8;
+  --shadow: 0 12px 35px #1232;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: radial-gradient(
+    circle at top right,
+    #126447 0,
+    transparent 38%
+  ), var(--bg);
+  min-height: 100vh;
+  transition: background .25s, color .25s;
+}
+
+header {
+  text-align: center;
+  padding: 25px 15px;
+  background: var(--panel2);
+  border-bottom: 3px solid var(--green);
+}
+
+header h1 {
+  color: var(--green);
+  font-size: clamp(27px, 5vw, 38px);
+}
+
+header p {
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.top-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.container {
+  width: min(1100px, 94%);
+  margin: 24px auto 35px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin-bottom: 16px;
+}
+
+.score-head {
+  text-align: center;
+  padding: 8px 0 20px;
+}
+
+.teams {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: var(--green);
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.score {
+  font-size: clamp(48px, 9vw, 70px);
+  font-weight: 800;
+  margin: 12px 0 6px;
+  letter-spacing: 1px;
+}
+
+.subtext {
+  color: var(--muted);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.stat {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  color: var(--green);
+  font-size: 21px;
+  margin-top: 5px;
+}
+
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+select, input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  font-size: 15px;
+  outline-color: var(--green);
+}
+
+.setup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform .15s, filter .15s;
+  background: var(--green);
+  color: var(--green-dark);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.07);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.btn-red {
+  background: var(--red);
+  color: white;
+}
+
+.btn-yellow {
+  background: var(--yellow);
+  color: #17212a;
+}
+
+.btn-neutral {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.status {
+  margin-top: 15px;
+  padding: 13px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--green);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.progress-wrap {
+  margin-top: 15px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.progress {
+  height: 10px;
+  background: var(--panel2);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--green), #a4f5d4);
+  transition: width .25s;
+}
+
+.section-title {
+  margin: 20px 0 10px;
+  font-size: 18px;
+}
+
+.commentary {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 13px;
+  min-height: 56px;
+  line-height: 1.5;
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.event span:last-child {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.dot.wicket {
+  background: var(--red);
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 14px;
+}
+
+.result {
+  display: none;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #174d3a;
+  color: #eafff5;
+  text-align: center;
+  font-weight: bold;
+}
+
+body.light .result {
+  background: #d5f5e7;
+  color: #075b3d;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 13px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--muted);
+}
+
+@media (max-width: 780px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  .card {
+    padding: 16px;
+  }
+
+  .setup {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    gap: 6px;
+  }
+
+  .stat {
+    padding: 10px 4px;
+    font-size: 13px;
+  }
+
+  .stat strong {
+    font-size: 18px;
+  }
+
+  .buttons {
+    gap: 7px;
+  }
+
+  button {
+    padding: 12px 5px;
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏏 CRICKET ZONE</h1>
+  <p>Your Interactive Cricket Scoreboard</p>
+
+  <div class="top-actions">
+    <button class="btn-neutral" id="themeBtn" type="button">
+      ☀️ Light Mode
+    </button>
+
+    <button class="btn-neutral" id="newMatchBtn" type="button">
+      ↻ New Match
+    </button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="layout">
+
+    <!-- MATCH SETTINGS AND SCOREBOARD -->
+    <section class="card">
+      <h2>🏆 Match Centre</h2>
+
+      <div class="setup">
+        <div>
+          <label for="teamA">Batting team</label>
+          <select id="teamA">
+            <option>India</option>
+            <option>Australia</option>
+            <option>England</option>
+            <option>Pakistan</option>
+            <option>New Zealand</option>
+            <option>South Africa</option>
+            <option>Sri Lanka</option>
+            <option>Bangladesh</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="teamB">Opponent</label>
+          <select id="teamB">
+            <option>Australia</option>
+            <option>India</option>
+            <option>England</option>
+            <option>Pakistan</option>
+            <option>New Zealand</option>
+            <option>South Africa</option>
+            <option>Sri Lanka</option>
+            <option>Bangladesh</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="oversLimit">Innings length</label>
+          <select id="oversLimit">
+            <option value="5">5 overs</option>
+            <option value="10">10 overs</option>
+            <option value="20" selected>20 overs</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="targetInput">Target (optional)</label>
+          <input id="targetInput" type="number" min="1"
+                 placeholder="e.g. 151">
+        </div>
+      </div>
+
+      <div class="score-head">
+        <div class="teams">
+          <span id="battingName">INDIA</span>
+          <span>vs</span>
+          <span id="opponentName">AUSTRALIA</span>
+        </div>
+
+        <div class="score" id="score">0/0</div>
+        <div class="subtext">Runs / Wickets</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          Overs
+          <strong id="overs">0.0</strong>
+        </div>
+
+        <div class="stat">
+          Run Rate
+          <strong id="rate">0.00</strong>
+        </div>
+
+        <div class="stat">
+          Balls Left
+          <strong id="ballsLeft">120</strong>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Innings progress</span>
+          <span id="progressText">0%</span>
+        </div>
+
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <h3 class="section-title">Add ball result</h3>
+
+      <div class="buttons">
+        <button type="button" onclick="addBall('0')">
+          Dot Ball · 0
+        </button>
+
+        <button type="button" onclick="addBall('1')">
+          +1 Run
+        </button>
+
+        <button type="button" onclick="addBall('2')">
+          +2 Runs
+        </button>
+
+        <button type="button" onclick="addBall('3')">
+          +3 Runs
+        </button>
+
+        <button type="button" onclick="addBall('4')">
+          Four · 4
+        </button>
+
+        <button type="button" onclick="addBall('6')">
+          Six · 6
+        </button>
+
+        <button type="button" class="btn-red"
+                onclick="addBall('W')">
+          Wicket
+        </button>
+
+        <button type="button" class="btn-yellow"
+                onclick="addBall('WD')">
+          Wide +1
+        </button>
+
+        <button type="button" class="btn-yellow"
+                onclick="addBall('NB')">
+          No-ball +1
+        </button>
+
+        <button type="button" class="btn-neutral wide"
+                onclick="undoLast()">
+          ↶ Undo Last Ball
+        </button>
+
+        <button type="button" class="btn-neutral wide"
+                onclick="resetInnings()">
+          Reset Innings
+        </button>
+      </div>
+
+      <div class="status" id="status" aria-live="polite">
+        Match ready! Choose the teams and start scoring.
+      </div>
+
+      <div class="result" id="result"></div>
+
+      <p class="note">
+        Practice simulator: wides and no-balls add one extra run
+        and do not count as legal balls. This simplified version
+        does not model every official cricket scoring rule.
+      </p>
+    </section>
+
+    <!-- COMMENTARY AND SUMMARY -->
+    <aside class="card">
+      <h2>🎙️ Ball-by-ball</h2>
+
+      <div class="commentary" id="commentary">
+        Welcome to Cricket Zone! The match is ready to begin.
+      </div>
+
+      <h3 class="section-title">Recent Events</h3>
+
+      <div class="event-list" id="events">
+        <div class="empty">No balls recorded yet.</div>
+      </div>
+
+      <h3 class="section-title">📘 Match Summary</h3>
+
+      <div class="event-list">
+        <div class="event">
+          <span>Batting team</span>
+          <strong id="summaryTeam">India</strong>
+        </div>
+
+        <div class="event">
+          <span>Opponent</span>
+          <strong id="summaryOpponent">Australia</strong>
+        </div>
+
+        <div class="event">
+          <span>Innings limit</span>
+          <strong id="summaryLimit">20 overs</strong>
+        </div>
+
+        <div class="event">
+          <span>Wickets remaining</span>
+          <strong id="wicketsLeft">10</strong>
+        </div>
+
+        <div class="event">
+          <span>Target</span>
+          <strong id="summaryTarget">Not set</strong>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<footer>
+  <p>Cricket Zone | B.Sc. IT Mini Project</p>
+  <p>Built with HTML, CSS and JavaScript — all in one file</p>
+</footer>
+
+<script>
+// ===== JAVASCRIPT: MATCH LOGIC =====
+
+let runs = 0;
+let wickets = 0;
+let legalBalls = 0;
+let events = [];
+let snapshots = [];
+let matchOver = false;
+
+const $ = id => document.getElementById(id);
+
+const legalBallLimit = () =>
+  Number($('oversLimit').value) * 6;
+
+const currentOvers = () =>
+  Math.floor(legalBalls / 6) + '.' + (legalBalls % 6);
+
+
+// Save the current state so the last ball can be undone.
+function recordSnapshot() {
+  snapshots.push({
+    runs,
+    wickets,
+    legalBalls,
+    events: events.map(event => ({...event})),
+    matchOver,
+    status: $('status').textContent,
+    commentary: $('commentary').textContent,
+    resultText: $('result').textContent,
+    resultVisible: $('result').style.display
+  });
+}
+
+
+// Add the result of one ball.
+function addBall(type) {
+  if (matchOver) {
+    $('status').textContent =
+      'The innings is over. Start a new innings to continue.';
+    return;
+  }
+
+  if (legalBalls >= legalBallLimit() || wickets >= 10) {
+    finishInnings();
+    return;
+  }
+
+  recordSnapshot();
+
+  let message = '';
+
+  if (type === 'W') {
+    wickets++;
+    legalBalls++;
+    message = 'WICKET! A batter is out.';
+  } else if (type === 'WD') {
+    runs++;
+    message = 'Wide ball — 1 extra run. Ball does not count.';
+  } else if (type === 'NB') {
+    runs++;
+    message = 'No-ball — 1 extra run. Ball does not count.';
+  } else {
+    const value = Number(type);
+    runs += value;
+    legalBalls++;
+
+    if (value === 0) {
+      message = 'Dot ball. No run scored.';
+    } else if (value === 4) {
+      message = 'FOUR! Beautiful boundary!';
+    } else if (value === 6) {
+      message = 'SIX! Out of the ground!';
+    } else {
+      message = value +
+        (value === 1 ? ' run' : ' runs') + ' scored.';
+    }
+  }
+
+  events.unshift({
+    type,
+    message,
+    score: runs + '/' + wickets,
+    over: currentOvers()
+  });
+
+  $('commentary').textContent = message;
+  $('status').textContent = message;
+
+  updateUI();
+
+  const target = Number($('targetInput').value);
+
+  if (target > 0 && runs >= target) {
+    matchOver = true;
+    $('result').style.display = 'block';
+    $('result').textContent =
+      $('teamA').value + ' won by ' +
+      (10 - wickets) + ' wicket(s)! Target reached.';
+
+    $('status').textContent =
+      'Target reached — match complete!';
+  } else if (
+    legalBalls >= legalBallLimit() || wickets >= 10
+  ) {
+    finishInnings();
+  }
+}
+
+
+// Refresh the scoreboard, progress bar and recent events.
+function updateUI() {
+  const maxBalls = legalBallLimit();
+
+  $('score').textContent = runs + '/' + wickets;
+  $('overs').textContent = currentOvers();
+
+  $('rate').textContent = legalBalls === 0
+    ? '0.00'
+    : (runs / (legalBalls / 6)).toFixed(2);
+
+  $('ballsLeft').textContent =
+    Math.max(0, maxBalls - legalBalls);
+
+  const pct = Math.min(
+    100,
+    Math.round((legalBalls / maxBalls) * 100)
+  );
+
+  $('progressBar').style.width = pct + '%';
+  $('progressText').textContent = pct + '%';
+
+  $('wicketsLeft').textContent = 10 - wickets;
+
+  $('summaryTeam').textContent = $('teamA').value;
+  $('summaryOpponent').textContent = $('teamB').value;
+  $('summaryLimit').textContent =
+    $('oversLimit').value + ' overs';
+
+  $('summaryTarget').textContent =
+    Number($('targetInput').value) > 0
+      ? $('targetInput').value
+      : 'Not set';
+
+  $('battingName').textContent =
+    $('teamA').value.toUpperCase();
+
+  $('opponentName').textContent =
+    $('teamB').value.toUpperCase();
+
+  $('events').innerHTML = '';
+
+  if (events.length === 0) {
+    $('events').innerHTML =
+      '<div class="empty">No balls recorded yet.</div>';
+  } else {
+    events.slice(0, 12).forEach(event => {
+      const row = document.createElement('div');
+      row.className = 'event';
+
+      const left = document.createElement('span');
+      const dot = document.createElement('i');
+
+      dot.className =
+        'dot' + (event.type === 'W' ? ' wicket' : '');
+
+      left.appendChild(dot);
+      left.appendChild(
+        document.createTextNode(event.message)
+      );
+
+      const right = document.createElement('span');
+      right.textContent =
+        event.over + ' ov · ' + event.score;
+
+      row.append(left, right);
+      $('events').appendChild(row);
+    });
+  }
+}
+
+
+// Finish the innings and display the result.
+function finishInnings() {
+  matchOver = true;
+
+  $('result').style.display = 'block';
+
+  const target = Number($('targetInput').value);
+
+  if (target > 0) {
+    if (runs === target - 1) {
+      $('result').textContent =
+        'Scores level! Innings complete.';
+    } else if (runs < target) {
+      $('result').textContent =
+        $('teamB').value + ' defended the target. ' +
+        $('teamA').value + ' scored ' +
+        runs + '/' + wickets + '.';
+    } else {
+      $('result').textContent =
+        $('teamA').value + ' reached the target!';
+    }
+  } else {
+    $('result').textContent =
+      'Innings complete! Final score: ' +
+      runs + '/' + wickets + ' in ' +
+      currentOvers() + ' overs.';
+  }
+
+  $('status').textContent = 'Innings completed.';
+  $('commentary').textContent = $('result').textContent;
+}
+
+
+// Undo the most recent scoring action.
+function undoLast() {
+  if (!snapshots.length) {
+    $('status').textContent =
+      'There is no ball to undo yet.';
+    return;
+  }
+
+  const previous = snapshots.pop();
+
+  runs = previous.runs;
+  wickets = previous.wickets;
+  legalBalls = previous.legalBalls;
+  events = previous.events;
+  matchOver = previous.matchOver;
+
+  $('status').textContent = previous.status;
+  $('commentary').textContent = previous.commentary;
+  $('result').textContent = previous.resultText;
+  $('result').style.display = previous.resultVisible;
+
+  updateUI();
+}
+
+
+// Reset the current innings.
+function resetInnings() {
+  runs = 0;
+  wickets = 0;
+  legalBalls = 0;
+  events = [];
+  snapshots = [];
+  matchOver = false;
+
+  $('result').style.display = 'none';
+  $('result').textContent = '';
+
+  $('status').textContent =
+    'Innings reset. Ready to play!';
+
+  $('commentary').textContent =
+    'The innings has been reset. Start scoring when ready.';
+
+  updateUI();
+}
+
+
+// Start a new match.
+function newMatch() {
+  resetInnings();
+
+  $('status').textContent =
+    'New match ready! Choose teams and start scoring.';
+}
+
+
+// Update the display when the teams change.
+$('teamA').addEventListener('change', updateUI);
+$('teamB').addEventListener('change', updateUI);
+
+
+// Update innings length.
+$('oversLimit').addEventListener('change', () => {
+  if (legalBalls > legalBallLimit()) {
+    resetInnings();
+
+    $('status').textContent =
+      'Overs limit changed. Innings reset to fit the new limit.';
+  }
+
+  updateUI();
+});
+
+
+// Update the target display.
+$('targetInput').addEventListener('input', updateUI);
+
+
+// Switch between light and dark themes.
+$('themeBtn').addEventListener('click', () => {
+  document.body.classList.toggle('light');
+
+  $('themeBtn').textContent =
+    document.body.classList.contains('light')
+      ? '🌙 Dark Mode'
+      : '☀️ Light Mode';
+});
+
+
+// Connect the new-match button.
+$('newMatchBtn').addEventListener('click', newMatch);
+
+
+// Display the initial scoreboard.
+updateUI();
+</script>
+
+</body>
+</html>
